@@ -1,17 +1,62 @@
 ---
+// frontend/src/pages/index.astro
+import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroBio from '../components/HeroBio.astro';
+import SocialLinks from '../components/SocialLinks.astro';
+import ProjectCard from '../components/ProjectCard.astro';
 
+// Fetch projects at BUILD time — no client JS needed
+const API_URL = import.meta.env.PUBLIC_API_URL || 'http://127.0.0.1:8000/api';
+
+let projects = [];
+
+try {
+  const response = await fetch(`${API_URL}/projects/`);
+  if (response.ok) {
+    projects = await response.json();
+  }
+} catch (error) {
+  console.error('Failed to fetch projects:', error);
+}
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<BaseLayout title="Patrick Sullivan — Full Stack Developer">
+  <!-- Hero Section -->
+  <HeroBio />
+
+  <!-- Social Links -->
+  <SocialLinks />
+
+  <!-- Divider -->
+  <div class="max-w-4xl mx-auto px-6">
+    <hr class="border-slate-700" />
+  </div>
+
+  <!-- Projects Section -->
+  <section id="projects" class="max-w-6xl mx-auto px-6 py-16">
+    <h2 class="text-3xl font-bold text-center mb-12">
+      My <span class="text-accent">Projects</span>
+    </h2>
+
+    {projects.length > 0 ? (
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {projects.map((project) => (
+          <ProjectCard
+            title={project.title}
+            description={project.description}
+            imageUrl={project.image_url}
+            githubUrl={project.github_url}
+            liveUrl={project.live_url}
+          />
+        ))}
+      </div>
+    ) : (
+      <p class="text-center text-muted">Projects coming soon...</p>
+    )}
+  </section>
+
+  <!-- Footer -->
+  <footer class="text-center py-8 text-muted text-sm border-t border-slate-700">
+    <p>© {new Date().getFullYear()} Patrick Sullivan. Built with Astro, Django & ☕</p>
+  </footer>
+</BaseLayout>
