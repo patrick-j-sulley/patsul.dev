@@ -40,9 +40,9 @@ const { title, description, imageUrl, githubUrl, liveUrl } = Astro.props;
           href={githubUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="text-sm text-accent hover:underline"
+          class="text-sm text-link hover:text-hover"
         >
-          GitHub →
+          GitHub
         </a>
       )}
       {liveUrl && (
@@ -50,9 +50,9 @@ const { title, description, imageUrl, githubUrl, liveUrl } = Astro.props;
           href={liveUrl}
           target="_blank"
           rel="noopener noreferrer"
-          class="text-sm text-accent hover:underline"
+          class="text-sm text-link hover:text-hover"
         >
-          Live Demo →
+          Live Demo
         </a>
       )}
     </div>

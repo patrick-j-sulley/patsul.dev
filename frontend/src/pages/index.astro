@@ -2,7 +2,6 @@
 // frontend/src/pages/index.astro
 import BaseLayout from '../layouts/BaseLayout.astro';
 import HeroBio from '../components/HeroBio.astro';
-import SocialLinks from '../components/SocialLinks.astro';
 import ProjectCard from '../components/ProjectCard.astro';
 
 // Fetch projects at BUILD time — no client JS needed
@@ -22,20 +21,17 @@ try {
 
 <BaseLayout title="Patrick Sullivan — Full Stack Developer">
   <!-- Hero Section -->
-  <HeroBio />
-
-  <!-- Social Links -->
-  <SocialLinks />
+  <HeroBio  />
 
   <!-- Divider -->
-  <div class="max-w-4xl mx-auto px-6">
-    <hr class="border-slate-700" />
+  <div class="max-w-6xl mx-auto px-6">
+    <hr class="border-surface" />
   </div>
 
   <!-- Projects Section -->
   <section id="projects" class="max-w-6xl mx-auto px-6 py-16">
-    <h2 class="text-3xl font-bold text-center mb-12">
-      My <span class="text-accent">Projects</span>
+    <h2 class="text-3xl font-title text-center mb-12">
+      Projects
     </h2>
 
     {projects.length > 0 ? (
@@ -56,7 +52,8 @@ try {
   </section>
 
   <!-- Footer -->
-  <footer class="text-center py-8 text-muted text-sm border-t border-slate-700">
-    <p>© {new Date().getFullYear()} Patrick Sullivan. Built with Astro, Django & ☕</p>
+  <footer class="text-center py-8 text-muted text-sm border-t border-surface">
+    <p>© {new Date().getFullYear()} Patrick Sullivan. Built with Astro, Vue.JS, Tailwind, Django</p>
   </footer>
 </BaseLayout>
+
