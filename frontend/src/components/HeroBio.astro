@@ -19,22 +19,24 @@ const links = [
 ---
 
 <section class="hero-bio relative min-h-screen flex flex-col justify-center max-w-4xl mx-auto px-6 py-20 text-center">
-  <!-- 3D Background -->
-  <div class="scene-3d">
-    <div class="stars-ring">
-      <div class="orb"></div>
-      <div class="orb"></div>
-      <div class="orb"></div>
-      <div class="orb"></div>
-      <div class="orb"></div>
-      <div class="orb"></div>
-      <div class="orb"></div>
+  <!-- Mobile: 3D ring in profile slot; md+: full-section background (see global.css) -->
+  <div class="hero-bio-visual" aria-hidden="true">
+    <div class="scene-3d">
+      <div class="stars-ring">
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+        <div class="orb"></div>
+      </div>
     </div>
   </div>
-  <!-- Profile Image -->
-  <div class="mb-8">
+  <!-- Profile image: desktop only (mobile uses hero-bio-visual above) -->
+  <div class="mb-8 hidden md:block">
     <div class="w-32 h-32 mx-auto rounded-full overflow-hidden border-2 border-surface">
-      <img src="https://avatars.githubusercontent.com/u/17734388?v=4"/>
+      <img src="https://avatars.githubusercontent.com/u/17734388?v=4" />
     </div>
   </div>
 
@@ -58,7 +60,7 @@ const links = [
     View My Work
   </a>
 
-  <!-- Social Links --!>
+  <!-- Social Links -->
   <div class="flex justify-center gap-6 p-8">
     {links.map((link) => (
       <a
