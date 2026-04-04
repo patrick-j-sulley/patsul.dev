@@ -5,10 +5,6 @@ server {
     listen 80;
     server_name _;
 
-    # Docker's internal resolver — accessible from all Railway containers
-    resolver 127.0.0.11 valid=10s;
-    resolver_timeout 10s;
-
     # Health check endpoint
     location /health {
         access_log off;
@@ -18,9 +14,9 @@ server {
 
     # Admin routes to backend
     location /admin {
-        set $backend http://patsul.dev.railway.internal:8000;
+        set $backend http://patsuldev-production-d9be.up.railway.app;
         proxy_pass $backend;
-        proxy_set_header Host $host;
+        proxy_set_header Host patsuldev-production-d9be.up.railway.app;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Host $host;
@@ -29,9 +25,9 @@ server {
 
     # API routes to backend
     location /api {
-        set $backend http://patsul.dev.railway.internal:8000;
+        set $backend http://patsuldev-production-d9be.up.railway.app;
         proxy_pass $backend;
-        proxy_set_header Host $host;
+        proxy_set_header Host patsuldev-production-d9be.up.railway.app;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Host $host;
@@ -40,9 +36,9 @@ server {
 
     # Everything else to frontend
     location / {
-        set $frontend http://soothing-presence.railway.internal:8080;
+        set $frontend http://soothing-presence-production.up.railway.app;
         proxy_pass $frontend;
-        proxy_set_header Host $host;
+        proxy_set_header Host soothing-presence-production.up.railway.app;
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Host $host;
