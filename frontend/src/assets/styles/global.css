@@ -57,8 +57,21 @@
     transform: scale(1.1);
   }
   
-  /* 3D Scene Background */
-  .scene-3d {
+  /*
+   * 3D stars ring: mobile = avatar-sized slot in flow; md+ = original full-hero background.
+   * Breakpoint matches Tailwind md (768px).
+   */
+  .hero-bio-visual {
+    position: relative;
+    width: 8rem;
+    height: 8rem;
+    margin: 0 auto 2rem;
+    overflow: visible;
+    perspective: 420px;
+    z-index: 0;
+  }
+
+  .hero-bio-visual .scene-3d {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -66,23 +79,24 @@
     height: 0;
     transform-style: preserve-3d;
     transform: translate(-50%, -50%) rotateX(-10deg) rotateY(20deg);
-    z-index: -1;
+    z-index: 0;
   }
-  
-  .stars-ring {
+
+  .hero-bio-visual .stars-ring {
     position: relative;
     width: 0;
     height: 0;
     transform-style: preserve-3d;
     animation: ring-spin 16s linear infinite;
   }
-  
-  .orb {
+
+  .hero-bio-visual .orb {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 50%;
+    left: 50%;
     width: 6px;
     height: 6px;
+    margin: -3px 0 0 -3px;
     border-radius: 50%;
     background: #fff;
     box-shadow:
@@ -92,15 +106,46 @@
     transform-style: preserve-3d;
     will-change: transform, opacity;
   }
-  
-  /* Position 7 orbs in a circle using rotateY and translateZ */
-  .orb:nth-child(1) { transform: rotateY(0deg) translateZ(22.5vw); }
-  .orb:nth-child(2) { transform: rotateY(51.43deg) translateZ(22.5vw); }
-  .orb:nth-child(3) { transform: rotateY(102.86deg) translateZ(22.5vw); }
-  .orb:nth-child(4) { transform: rotateY(154.29deg) translateZ(22.5vw); }
-  .orb:nth-child(5) { transform: rotateY(205.71deg) translateZ(22.5vw); }
-  .orb:nth-child(6) { transform: rotateY(257.14deg) translateZ(22.5vw); }
-  .orb:nth-child(7) { transform: rotateY(308.57deg) translateZ(22.5vw); }
+
+  .hero-bio-visual .orb:nth-child(1) { transform: rotateY(0deg) translateZ(3.25rem); }
+  .hero-bio-visual .orb:nth-child(2) { transform: rotateY(51.43deg) translateZ(3.25rem); }
+  .hero-bio-visual .orb:nth-child(3) { transform: rotateY(102.86deg) translateZ(3.25rem); }
+  .hero-bio-visual .orb:nth-child(4) { transform: rotateY(154.29deg) translateZ(3.25rem); }
+  .hero-bio-visual .orb:nth-child(5) { transform: rotateY(205.71deg) translateZ(3.25rem); }
+  .hero-bio-visual .orb:nth-child(6) { transform: rotateY(257.14deg) translateZ(3.25rem); }
+  .hero-bio-visual .orb:nth-child(7) { transform: rotateY(308.57deg) translateZ(3.25rem); }
+
+  @media (min-width: 768px) {
+    .hero-bio-visual {
+      position: absolute;
+      inset: 0;
+      width: auto;
+      height: auto;
+      margin: 0;
+      perspective: none;
+      overflow: visible;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .hero-bio-visual .scene-3d {
+      z-index: -1;
+    }
+
+    .hero-bio-visual .orb {
+      top: 0;
+      left: 0;
+      margin: 0;
+    }
+
+    .hero-bio-visual .orb:nth-child(1) { transform: rotateY(0deg) translateZ(22.5vw); }
+    .hero-bio-visual .orb:nth-child(2) { transform: rotateY(51.43deg) translateZ(22.5vw); }
+    .hero-bio-visual .orb:nth-child(3) { transform: rotateY(102.86deg) translateZ(22.5vw); }
+    .hero-bio-visual .orb:nth-child(4) { transform: rotateY(154.29deg) translateZ(22.5vw); }
+    .hero-bio-visual .orb:nth-child(5) { transform: rotateY(205.71deg) translateZ(22.5vw); }
+    .hero-bio-visual .orb:nth-child(6) { transform: rotateY(257.14deg) translateZ(22.5vw); }
+    .hero-bio-visual .orb:nth-child(7) { transform: rotateY(308.57deg) translateZ(22.5vw); }
+  }
   
   @keyframes ring-spin {
     from {
