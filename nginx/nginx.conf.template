@@ -2,7 +2,7 @@
 # Upstreams use literal host:port after envsubst so nginx resolves via /etc/resolv.conf
 # (Railway private DNS). Do not use variable proxy_pass + 127.0.0.11 — unavailable on Railway.
 # Set BACKEND_HOST / FRONTEND_HOST to the full private hostname (e.g. *.railway.internal).
-# PORT: injected by Railway (public router); default 80 in entrypoint for local Docker.
+# Listen directives come from NGINX_LISTEN_BLOCK (entrypoint): 80 and/or Railway $PORT.
 
 map $http_x_forwarded_proto $forwarded_proto {
     default $http_x_forwarded_proto;
@@ -18,7 +18,7 @@ error_log /var/log/nginx/error.log warn;
 access_log /var/log/nginx/access.log;
 
 server {
-    listen ${PORT};
+${NGINX_LISTEN_BLOCK}
     server_name _;
 
     # Health check (Railway / probes)
