@@ -1,0 +1,22 @@
+# Single entry port for local dev: http://localhost:8080 → /, /admin, /api, /static/
+#
+# Terminal 1 — Django (must listen on all interfaces so Docker can reach it):
+#   python manage.py runserver 0.0.0.0:8000
+# Terminal 2 — Astro dev (same):
+#   cd frontend && npm run dev -- --host 0.0.0.0 --port 4321
+# Terminal 3:
+#   docker compose up --build
+#
+# If Astro uses another port, set FRONTEND_PORT in `environment` below.
+services:
+  nginx:
+    build: ./nginx
+    ports:
+      - "8080:80"
+    environment:
+      BACKEND_HOST: host.docker.internal
+      BACKEND_PORT: "8000"
+      FRONTEND_HOST: host.docker.internal
+      FRONTEND_PORT: "4321"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
