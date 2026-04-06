@@ -31,7 +31,17 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'fallback-secret-key-for-dev')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
+ALLOWED_HOSTS = [
+    h.strip()
+    for h in os.getenv(
+        'ALLOWED_HOSTS',
+        'localhost,127.0.0.1,host.docker.internal',
+    ).split(',')
+    if h.strip()
+]
+
+# Behind nginx / Railway: trust X-Forwarded-Host when present (falls back to Host)
+USE_X_FORWARDED_HOST = os.getenv('USE_X_FORWARDED_HOST', 'True') == 'True'
 
 
 # Application definition
@@ -158,18 +168,26 @@ CLOUDINARY_STORAGE = {
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 #CORS
-CORS_ALLOWED_ORIGINS = os.getenv(
-    'CORS_ALLOWED_ORIGINS',
-    'http://localhost:4321'
-).split(',')
+CORS_ALLOWED_ORIGINS = [
+    o.strip()
+    for o in os.getenv(
+        'CORS_ALLOWED_ORIGINS',
+        'http://localhost:4321,http://localhost:8080,http://127.0.0.1:4321,http://127.0.0.1:8080',
+    ).split(',')
+    if o.strip()
+]
 
 CORS_ALLOW_CREDENTIALS = True
 
 #CSRF
-CSRF_TRUSTED_ORIGINS = os.getenv(
-    'CSRF_TRUSTED_ORIGINS',
-    'http://localhost:4321'
-).split(',')
+CSRF_TRUSTED_ORIGINS = [
+    o.strip()
+    for o in os.getenv(
+        'CSRF_TRUSTED_ORIGINS',
+        'http://localhost:4321,http://localhost:8080,http://127.0.0.1:4321,http://127.0.0.1:8080',
+    ).split(',')
+    if o.strip()
+]
 
 CSRF_COOKIE_NAME = 'csrftoken'
 CSRF_COOKIE_HTTPONLY = False
