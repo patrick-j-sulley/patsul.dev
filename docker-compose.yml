@@ -17,6 +17,7 @@ services:
     ports:
       - "8080:80"
     environment:
+      PORT: "80"
       BACKEND_HOST: host.docker.internal
       BACKEND_PORT: "8000"
       FRONTEND_HOST: host.docker.internal

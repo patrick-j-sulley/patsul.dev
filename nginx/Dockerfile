@@ -10,6 +10,7 @@ COPY nginx.conf.template /etc/nginx/nginx.conf.template
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
+# Metadata only; real listen port is $PORT at runtime (Railway injects this).
 EXPOSE 80
 
 ENTRYPOINT ["/entrypoint.sh"]
