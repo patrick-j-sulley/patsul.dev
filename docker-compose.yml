@@ -8,6 +8,9 @@
 #   docker compose up --build
 #
 # If Astro uses another port, set FRONTEND_PORT in `environment` below.
+#
+# Railway: BACKEND_HOST / FRONTEND_HOST must be the full private hostname
+# (e.g. my-service.railway.internal), not the short service slug alone.
 services:
   nginx:
     build: ./nginx

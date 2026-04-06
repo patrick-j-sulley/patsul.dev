@@ -1,4 +1,8 @@
 # Included inside nginx `http { }` via conf.d
+# Upstreams use literal host:port after envsubst so nginx resolves via /etc/resolv.conf
+# (Railway private DNS). Do not use variable proxy_pass + 127.0.0.11 — unavailable on Railway.
+# Set BACKEND_HOST / FRONTEND_HOST to the full private hostname (e.g. *.railway.internal).
+
 map $http_x_forwarded_proto $forwarded_proto {
     default $http_x_forwarded_proto;
     ''      $scheme;
@@ -9,19 +13,12 @@ map $http_upgrade $connection_upgrade {
     ''      close;
 }
 
-# Docker / Railway container DNS (resolves service hostnames at request time when using variables in proxy_pass)
-resolver 127.0.0.11 valid=10s ipv6=off;
-resolver_timeout 10s;
-
 error_log /var/log/nginx/error.log warn;
 access_log /var/log/nginx/access.log;
 
 server {
     listen 80;
     server_name _;
-
-    set $backend_upstream  http://${BACKEND_HOST}:${BACKEND_PORT};
-    set $frontend_upstream http://${FRONTEND_HOST}:${FRONTEND_PORT};
 
     # Health check (Railway / probes)
     location /health {
@@ -32,7 +29,7 @@ server {
 
     # Django static (admin CSS/JS via WhiteNoise)
     location /static/ {
-        proxy_pass $backend_upstream;
+        proxy_pass http://${BACKEND_HOST}:${BACKEND_PORT};
         proxy_set_header Host              $host;
         proxy_set_header X-Real-IP         $remote_addr;
         proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
@@ -42,7 +39,7 @@ server {
 
     # Django REST API (urls: /api/...)
     location /api {
-        proxy_pass $backend_upstream;
+        proxy_pass http://${BACKEND_HOST}:${BACKEND_PORT};
         proxy_set_header Host              $host;
         proxy_set_header X-Real-IP         $remote_addr;
         proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
@@ -52,7 +49,7 @@ server {
 
     # Django admin (urls: /admin/...)
     location /admin {
-        proxy_pass $backend_upstream;
+        proxy_pass http://${BACKEND_HOST}:${BACKEND_PORT};
         proxy_set_header Host              $host;
         proxy_set_header X-Real-IP         $remote_addr;
         proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
@@ -62,7 +59,7 @@ server {
 
     # Astro / Vue (dev server or preview) — Upgrade headers help Vite HMR through the proxy
     location / {
-        proxy_pass $frontend_upstream;
+        proxy_pass http://${FRONTEND_HOST}:${FRONTEND_PORT};
         proxy_http_version 1.1;
         proxy_set_header Connection        $connection_upgrade;
         proxy_set_header Upgrade           $http_upgrade;
