@@ -1,0 +1,2 @@
+# Shell scripts for Linux/Docker must use LF only (CRLF breaks shebang in containers).
+nginx/*.sh text eol=lf
