@@ -1,0 +1,4 @@
+[deploy]
+# Run database migrations and ensure the admin superuser exists before each deploy.
+# The create_superuser command is idempotent — safe to run on every deploy.
+preDeployCommand = "python manage.py migrate && python manage.py create_superuser"
