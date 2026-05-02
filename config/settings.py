@@ -189,6 +189,11 @@ CSRF_TRUSTED_ORIGINS = [
     if o.strip()
 ]
 
+# Scope the CSRF cookie to the public domain so it is readable both when
+# Django is hit directly and when requests arrive through the nginx proxy.
+# In development this env var is unset and Django defaults to the request host.
+CSRF_COOKIE_DOMAIN = os.getenv('CSRF_COOKIE_DOMAIN', None)
+
 CSRF_COOKIE_NAME = 'csrftoken'
 CSRF_COOKIE_HTTPONLY = False
 CSRF_COOKIE_SAMESITE = 'Lax'
@@ -211,9 +216,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #Prod Security (Only when DEBUG = False)
 if not DEBUG:
     SECURE_SSL_REDIRECT = True
+    # Trust the X-Forwarded-Proto header set by the nginx proxy so Django
+    # knows the original request was HTTPS and doesn't redirect infinitely.
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+    # Scope session cookie to the same domain as the CSRF cookie so both
+    # survive the nginx proxy hop (e.g. patsul.dev).
+    if CSRF_COOKIE_DOMAIN:
+        SESSION_COOKIE_DOMAIN = CSRF_COOKIE_DOMAIN
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
